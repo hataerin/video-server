@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require("express");
 const http = require("http");
+const cors = require('cors');
 const app = express();
 const server = http.createServer(app);
 const socket = require("socket.io");
@@ -9,10 +10,12 @@ const io = socket(server);
 const users = {};
 
 const socketToRoom = {};
-
+app.use(cors());
 io.on('connection', socket => {
     socket.on("join room", roomID => {
-        if (users[roomID]) {
+
+	    console.log(roomID);
+	    if (users[roomID]) {
             const length = users[roomID].length;
             if (length === 4) {
                 socket.emit("room full");
